@@ -83,16 +83,3 @@ Reduzir a incerteza e o tempo de espera nos pontos de ônibus de Itapetininga, t
 > O projeto ainda está em fase inicial. As instruções de instalação serão adicionadas conforme o desenvolvimento avança.
 
 ---
-
-## Estrutura do Repositório
-
-```
-rastreamento-de-transporte-inteligente/
-├── hardware/          # Scripts e configurações do Raspberry Pi
-├── backend/           # API e servidor
-├── frontend/          # Site público de rastreamento
-├── docs/              # Documentação técnica
-└── README.md
-```
-
----
