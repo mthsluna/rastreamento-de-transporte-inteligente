@@ -82,14 +82,6 @@ Reduzir a incerteza e o tempo de espera nos pontos de ônibus de Itapetininga, t
 
 > O projeto ainda está em fase inicial. As instruções de instalação serão adicionadas conforme o desenvolvimento avança.
 
-```bash
-# Clone o repositório
-git clone https://github.com/seu-usuario/rastreamento-de-transporte-inteligente.git
-
-# Entre no diretório
-cd rastreamento-de-transporte-inteligente
-```
-
 ---
 
 ## Estrutura do Repositório
@@ -104,36 +96,3 @@ rastreamento-de-transporte-inteligente/
 ```
 
 ---
-
-## Contexto
-
-Itapetininga é uma cidade com mais de 160 mil habitantes no interior de São Paulo. O transporte público local enfrenta desafios comuns às cidades médias brasileiras: falta de informação em tempo real nos pontos de ônibus e dependência de horários nem sempre cumpridos. Este projeto nasce com o objetivo de usar tecnologia acessível — como o Raspberry Pi — para resolver um problema real do dia a dia da população.
-
----
-
-## Contribuindo
-
-Contribuições são muito bem-vindas! Se você quiser ajudar com o projeto:
-
-1. Fork este repositório
-2. Crie uma branch para sua feature (`git checkout -b feature/minha-feature`)
-3. Commit suas alterações (`git commit -m 'Adiciona minha feature'`)
-4. Push para a branch (`git push origin feature/minha-feature`)
-5. Abra um Pull Request
-
----
-
-## Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
----
-
-## Contato
-
-Desenvolvido com carinho para a cidade de Itapetininga/SP.
-Dúvidas, sugestões ou interesse em colaborar? Abra uma [issue](https://github.com/seu-usuario/rastreamento-de-transporte-inteligente/issues) no repositório.
-
----
-
-*"Tecnologia a serviço do cidadão itapetiningano."*
