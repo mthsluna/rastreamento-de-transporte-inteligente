@@ -21,7 +21,7 @@ Reduzir a incerteza e o tempo de espera nos pontos de ônibus de Itapetininga, t
 ## Como Funciona
 
 ```
-┌─────────────────────┐       GPS + Chip       ┌──────────────────────┐
+┌─────────────────────┐       GPS + Chip        ┌──────────────────────┐
 │   Ônibus Urbano     │ ──────────────────────► │   Servidor / Nuvem   │
 │  (Raspberry Pi +    │                         │  (Processamento de   │
 │   Chip de Dados)    │                         │      Localização)    │
