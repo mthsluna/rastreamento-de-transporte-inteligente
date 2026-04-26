@@ -1,4 +1,4 @@
-# rastreamento-de-transporte-inteligente
+# Rastreamento de transporte inteligente
 
 Sistema de rastreamento em tempo real de ônibus urbanos de Itapetininga/SP. Raspberry Pi
 instalados nos ônibus transmitem localização via chip de dados para um servidor central.
