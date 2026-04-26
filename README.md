@@ -1,166 +1,139 @@
-# Rastreamento de transporte inteligente
+# Rastreamento de Transporte Inteligente — Itapetininga/SP
 
-Sistema de rastreamento em tempo real de ônibus urbanos de Itapetininga/SP. Raspberry Pi
-instalados nos ônibus transmitem localização via chip de dados para um servidor central.
-Um site público consome essa API e exibe, para qualquer pessoa em um ponto de ônibus,
-a quantos quilômetros o veículo está.
+> Sistema de rastreamento em tempo real de ônibus urbanos da cidade de Itapetininga, com visualização via plataforma web acessível à população.
 
-## Como funciona
+---
+
+## Sobre o Projeto
+
+O **Rastreamento de Transporte Inteligente** é uma solução de mobilidade urbana desenvolvida para os cidadãos de Itapetininga/SP. O projeto instala dispositivos **Raspberry Pi** nos ônibus da cidade, equipados com chips de conectividade, que transmitem a localização dos veículos em tempo real para uma plataforma web.
+
+Com isso, qualquer pessoa que estiver em um ponto de ônibus poderá acessar o site e ver **exatamente a quantos quilômetros o ônibus está do seu ponto**, sem precisar depender de horários fixos ou esperar sem informação.
+
+---
+
+## Objetivo
+
+Reduzir a incerteza e o tempo de espera nos pontos de ônibus de Itapetininga, tornando o transporte público mais transparente, eficiente e acessível para toda a população.
+
+---
+
+## Como Funciona
 
 ```
-Raspberry Pi (ônibus)
-  └── GPS coleta coordenadas
-  └── Chip de dados envia para o servidor
-
-Servidor
-  └── Recebe e persiste as coordenadas
-  └── Calcula distância até cada ponto cadastrado
-  └── Expõe API REST/WebSocket
-
-Site público
-  └── Usuário seleciona o ponto
-  └── Vê distância e ETA de cada linha em tempo real
+┌─────────────────────┐       GPS + Chip       ┌──────────────────────┐
+│   Ônibus Urbano     │ ──────────────────────► │   Servidor / Nuvem   │
+│  (Raspberry Pi +    │                         │  (Processamento de   │
+│   Chip de Dados)    │                         │      Localização)    │
+└─────────────────────┘                         └──────────┬───────────┘
+                                                           │
+                                                    API em tempo real
+                                                           │
+                                                ┌──────────▼───────────┐
+                                                │     Site / App Web   │
+                                                │  "O ônibus está a    │
+                                                │   2,3 km do ponto"   │
+                                                └──────────────────────┘
 ```
 
-## Estrutura do repositório
+1. O **Raspberry Pi** instalado em cada ônibus coleta a localização via GPS continuamente.
+2. Os dados são transmitidos via **chip de dados móvel** para o servidor em nuvem.
+3. O **servidor** processa as coordenadas e calcula a distância até cada ponto de ônibus.
+4. O **site** exibe, em tempo real, a distância e o tempo estimado de chegada do ônibus ao ponto consultado.
+
+---
+
+## Tecnologias Utilizadas
+
+### Hardware
+| Componente | Descrição |
+|---|---|
+| Raspberry Pi | Computador embarcado instalado em cada ônibus |
+| Módulo GPS | Coleta de coordenadas geográficas em tempo real |
+| Chip de Dados (SIM) | Transmissão dos dados via rede móvel (4G/LTE) |
+
+### Software
+| Camada | Tecnologias |
+|---|---|
+| Firmware (Raspberry Pi) | Python, gpsd, scripts de transmissão |
+| Backend / API | A definir (Node.js / FastAPI / etc.) |
+| Banco de Dados | A definir (PostgreSQL / Firebase / etc.) |
+| Frontend Web | A definir (React / HTML+JS) |
+| Infraestrutura | A definir (AWS / GCP / VPS) |
+
+---
+
+## Funcionalidades Previstas
+
+- [x] Definição da arquitetura do sistema
+- [ ] Configuração do Raspberry Pi com módulo GPS
+- [ ] Transmissão de localização via chip de dados
+- [ ] API de backend para receber e processar coordenadas
+- [ ] Cálculo de distância entre ônibus e pontos cadastrados
+- [ ] Site público com visualização em tempo real
+- [ ] Cadastro de todos os pontos de ônibus de Itapetininga
+- [ ] Cadastro de todas as linhas de ônibus da cidade
+- [ ] Estimativa de tempo de chegada (ETA)
+- [ ] Versão mobile-friendly do site
+
+---
+
+## Como Executar (em desenvolvimento)
+
+> O projeto ainda está em fase inicial. As instruções de instalação serão adicionadas conforme o desenvolvimento avança.
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/rastreamento-de-transporte-inteligente.git
+
+# Entre no diretório
+cd rastreamento-de-transporte-inteligente
+```
+
+---
+
+## Estrutura do Repositório
 
 ```
 rastreamento-de-transporte-inteligente/
-  hardware/
-    gps_tracker.py          # script principal do Raspberry Pi
-    sender.py               # transmissão via chip de dados para o servidor
-    requirements.txt        # dependências Python do dispositivo
-    install.sh              # setup inicial do Raspberry Pi
-  backend/
-    server.py               # servidor principal (recebe coords, expõe API)
-    routes/
-      buses.py              # endpoints de localização dos ônibus
-      stops.py              # endpoints dos pontos cadastrados
-    models/
-      bus.py
-      stop.py
-    db.py                   # conexão com banco de dados
-    requirements.txt
-  frontend/
-    index.html              # página principal
-    app.js                  # lógica de consumo da API e atualização em tempo real
-    style.css
-  docs/
-    arquitetura.md          # decisões de design e diagrama detalhado
-    pontos-itapetininga.md  # lista dos pontos cadastrados
-  README.md
+├── hardware/          # Scripts e configurações do Raspberry Pi
+├── backend/           # API e servidor
+├── frontend/          # Site público de rastreamento
+├── docs/              # Documentação técnica
+└── README.md
 ```
 
-## Hardware
-
-Cada ônibus carrega:
-
-- Raspberry Pi (modelo a definir — Zero 2 W ou 3B+)
-- Módulo GPS (ex: u-blox NEO-6M ou similar via UART/USB)
-- Chip de dados SIM com plano de dados (operadora a definir)
-
-O script `hardware/gps_tracker.py` lê as coordenadas via `gpsd` e as envia
-periodicamente para o servidor via HTTP POST. Intervalo de envio configurável
-via variável de ambiente `SEND_INTERVAL_SECONDS` (padrão: `5`).
-
-## Configuração do Raspberry Pi
-
-```sh
-# No Raspberry Pi, após clonar o repositório:
-cd hardware
-bash install.sh
-
-# install.sh instala gpsd, as dependências Python e registra o serviço
-# como systemd unit para rodar automaticamente no boot.
-```
-
-Variáveis de ambiente necessárias no dispositivo:
-
-```sh
-SERVER_URL=https://api.seuservidor.com.br/location
-BUS_ID=onibus-001
-SEND_INTERVAL_SECONDS=5
-```
-
-Crie um arquivo `.env` em `hardware/` ou exporte as variáveis no ambiente do serviço.
-
-## Backend
-
-```sh
-cd backend
-pip install -r requirements.txt
-
-# Configurar variáveis de ambiente:
-DATABASE_URL=postgresql://user:pass@localhost/rastreamento
-PORT=8000
-
-python server.py
-```
-
-### Endpoints principais
-
-```
-POST /location
-  Body: { "bus_id": "onibus-001", "lat": -23.59, "lon": -48.05, "timestamp": "..." }
-  Recebe coordenadas dos Raspberry Pi.
-
-GET /buses
-  Retorna posição atual de todos os ônibus ativos.
-
-GET /stops
-  Retorna lista de pontos cadastrados com coordenadas.
-
-GET /stops/:stop_id/distances
-  Retorna distância e ETA de cada ônibus até o ponto informado.
-```
-
-## Frontend
-
-O site é estático. Basta servir a pasta `frontend/` com qualquer servidor HTTP.
-
-```sh
-cd frontend
-npx serve .
-# ou
-python3 -m http.server 3000
-```
-
-O usuário seleciona o ponto de ônibus no site e vê em tempo real a distância
-de cada linha. Atualizações via polling à API (intervalo configurável em `app.js`).
-
-## Pontos de ônibus
-
-Os pontos cadastrados ficam em `docs/pontos-itapetininga.md` e são importados
-no banco via script:
-
-```sh
-cd backend
-python scripts/import_stops.py ../docs/pontos-itapetininga.md
-```
-
-## Status do projeto
-
-- [x] Definição da arquitetura
-- [ ] Script GPS no Raspberry Pi
-- [ ] Transmissão via chip de dados
-- [ ] Servidor recebendo coordenadas
-- [ ] API de distância por ponto
-- [ ] Site público
-- [ ] Cadastro completo dos pontos de Itapetininga
-- [ ] Deploy em produção
-
-## Documentação
-
-- [Arquitetura e decisões de design](docs/arquitetura.md)
-- [Pontos de ônibus cadastrados](docs/pontos-itapetininga.md)
+---
 
 ## Contexto
 
-Itapetininga tem mais de 160 mil habitantes e o transporte público local carece
-de informação em tempo real nos pontos. Este projeto usa hardware acessível
-(Raspberry Pi) e conectividade móvel para resolver um problema real do dia a dia
-da população.
+Itapetininga é uma cidade com mais de 160 mil habitantes no interior de São Paulo. O transporte público local enfrenta desafios comuns às cidades médias brasileiras: falta de informação em tempo real nos pontos de ônibus e dependência de horários nem sempre cumpridos. Este projeto nasce com o objetivo de usar tecnologia acessível — como o Raspberry Pi — para resolver um problema real do dia a dia da população.
 
-O repositório não distribui credenciais, chaves de API, dados de usuários
-ou configurações de produção. Esses valores devem ser fornecidos via variáveis
-de ambiente em cada ambiente de deploy.
+---
+
+## Contribuindo
+
+Contribuições são muito bem-vindas! Se você quiser ajudar com o projeto:
+
+1. Fork este repositório
+2. Crie uma branch para sua feature (`git checkout -b feature/minha-feature`)
+3. Commit suas alterações (`git commit -m 'Adiciona minha feature'`)
+4. Push para a branch (`git push origin feature/minha-feature`)
+5. Abra um Pull Request
+
+---
+
+## Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+## Contato
+
+Desenvolvido com carinho para a cidade de Itapetininga/SP.
+Dúvidas, sugestões ou interesse em colaborar? Abra uma [issue](https://github.com/seu-usuario/rastreamento-de-transporte-inteligente/issues) no repositório.
+
+---
+
+*"Tecnologia a serviço do cidadão itapetiningano."*
